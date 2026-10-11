@@ -8,6 +8,7 @@ test("TSX net aliases keep pins unique", async () => {
   circuit.pcbDisabled = true
   circuit.add(
     <board>
+      <net name="V3V3" />
       <schematictext
         text="connectivity-map: each physical pin occurs once"
         schX={0}
