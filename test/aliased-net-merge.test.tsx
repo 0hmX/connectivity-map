@@ -6,7 +6,6 @@ import { ConnectivityMap } from "../src/ConnectivityMap"
 test.failing("TSX net aliases keep pins unique", async () => {
   const circuit = new Circuit()
   circuit.pcbDisabled = true
-  const pins = ["A", "B", "C", "D", "E", "F"]
   circuit.add(
     <board>
       <schematictext
@@ -19,25 +18,21 @@ test.failing("TSX net aliases keep pins unique", async () => {
         name="U1"
         schWidth={3}
         schHeight={2}
-        pinLabels={Object.fromEntries(
-          pins.map((name, i) => [`pin${i + 1}`, name]),
-        )}
+        pinLabels={{
+          pin1: "A",
+          pin2: "B",
+          pin3: "C",
+          pin4: "D",
+          pin5: "E",
+          pin6: "F",
+        }}
         connections={{ A: "net.V3V3", C: "net.V3V3", E: "net.V3V3" }}
       />
-      {[
-        ["A", "B"],
-        ["C", "D"],
-        ["E", "F"],
-        ["C", "E"],
-        ["A", "D"],
-      ].map(([from, to], i) => (
-        <trace
-          key={String(i)}
-          name={`EDGE_${i}`}
-          from={`.U1 > .${from}`}
-          to={`.U1 > .${to}`}
-        />
-      ))}
+      <trace name="EDGE_0" from=".U1 > .A" to=".U1 > .B" />
+      <trace name="EDGE_1" from=".U1 > .C" to=".U1 > .D" />
+      <trace name="EDGE_2" from=".U1 > .E" to=".U1 > .F" />
+      <trace name="EDGE_3" from=".U1 > .C" to=".U1 > .E" />
+      <trace name="EDGE_4" from=".U1 > .A" to=".U1 > .D" />
     </board>,
   )
   circuit.on("solver:started", (event) => {
