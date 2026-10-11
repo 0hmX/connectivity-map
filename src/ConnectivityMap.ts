@@ -42,20 +42,14 @@ export class ConnectivityMap {
           existingNets.values().next().value ??
           `connectivity_net${Object.keys(this.netMap).length}`
         for (const netId of existingNets) {
-          if (netId !== targetNetId) {
-            const targetNet = this.netMap[targetNetId]
-            const sourceNet = this.netMap[netId]
-            if (targetNet && sourceNet) {
-              targetNet.push(...sourceNet)
-
-              // we could delete the net, but setting it to reference the other net
-              // will make sure any usage of the old netId will still work
-              this.netMap[netId] = targetNet
-              for (const id of targetNet) {
-                this.idToNetMap[id] = targetNetId
-              }
-            }
+          const targetNet = this.netMap[targetNetId]
+          const sourceNet = this.netMap[netId]
+          if (!targetNet || !sourceNet || targetNet === sourceNet) continue
+          targetNet.push(...sourceNet)
+          for (const alias of Object.keys(this.netMap)) {
+            if (this.netMap[alias] === sourceNet) this.netMap[alias] = targetNet
           }
+          for (const id of sourceNet) this.idToNetMap[id] = targetNetId
         }
       }
 

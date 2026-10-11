@@ -3,7 +3,7 @@ import { Circuit } from "@tscircuit/core"
 import { convertCircuitJsonToSchematicSvg } from "circuit-to-svg"
 import { ConnectivityMap } from "../src/ConnectivityMap"
 
-test.failing("TSX net aliases keep pins unique", async () => {
+test("TSX net aliases keep pins unique", async () => {
   const circuit = new Circuit()
   circuit.pcbDisabled = true
   const pins = ["A", "B", "C", "D", "E", "F"]
